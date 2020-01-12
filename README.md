@@ -1,94 +1,90 @@
+# Nginx 入门教程
 
-<p align="center">
-  <a href="http://nginx.org/">
-    <img width="210" src="./nginx.svg" />
-  </a>
-</p>
+ [![](.gitbook/assets/nginx.svg)](http://nginx.org/)
 
-Nginx 是一款面向性能设计的 HTTP 服务器，能反向代理 HTTP，HTTPS 和邮件相关(SMTP，POP3，IMAP)的协议链接。并且提供了负载均衡以及 HTTP 缓存。它的设计充分使用异步事件模型，削减上下文调度的开销，提高服务器并发能力。采用了模块化设计，提供了丰富模块的第三方模块。
+Nginx 是一款面向性能设计的 HTTP 服务器，能反向代理 HTTP，HTTPS 和邮件相关\(SMTP，POP3，IMAP\)的协议链接。并且提供了负载均衡以及 HTTP 缓存。它的设计充分使用异步事件模型，削减上下文调度的开销，提高服务器并发能力。采用了模块化设计，提供了丰富模块的第三方模块。
 
 所以关于 Nginx，有这些标签：「异步」「事件」「模块化」「高性能」「高并发」「反向代理」「负载均衡」
 
-Linux系统：`Centos 7 x64`
-Nginx版本：`1.11.5`
+Linux系统：`Centos 7 x64` Nginx版本：`1.11.5`
 
-目录
-===
-- [安装](#安装)	
-  - [安装依赖](#安装依赖)	
-  - [下载](#下载)	
-  - [编译安装](#编译安装)	
-  - [nginx测试](#nginx测试)	
-  - [设置全局nginx命令](#设置全局nginx命令)	
-- [Mac 安装](#mac-安装)	
-  - [安装nginx](#安装nginx)	
-  - [启动服务](#启动服务)	
-- [开机自启动](#开机自启动)	
-- [运维](#运维)	
-  - [服务管理](#服务管理)	
-  - [重启服务防火墙报错解决](#重启服务防火墙报错解决)	
-- [nginx卸载](#nginx卸载)	
-- [参数说明](#参数说明)	
-- [配置](#配置)	
-  - [常用正则](#常用正则)	
-  - [全局变量](#全局变量)	
-  - [符号参考](#符号参考)	
-  - [配置文件](#配置文件)	
-  - [内置预定义变量](#内置预定义变量)	
-  - [反向代理](#反向代理)	
-  - [负载均衡](#负载均衡)	
-    - [RR](#rr)	
-    - [权重](#权重)	
-    - [ip_hash](#ip_hash)	
-    - [fair](#fair)	
-    - [url_hash](#url_hash)	
-  - [屏蔽ip](#屏蔽ip)	
-- [第三方模块安装方法](#第三方模块安装方法)	
-- [重定向](#重定向)	
-  - [重定向整个网站](#重定向整个网站)	
-  - [重定向单页](#重定向单页)	
-  - [重定向整个子路径](#重定向整个子路径)	
-- [性能](#性能)	
-  - [内容缓存](#内容缓存)	
-  - [Gzip压缩](#gzip压缩)	
-  - [打开文件缓存](#打开文件缓存)	
-  - [SSL缓存](#ssl缓存)	
-  - [上游Keepalive](#上游keepalive)	
-  - [监控](#监控)	
-- [常见使用场景](#常见使用场景)	
-  - [跨域问题](#跨域问题)	
-  - [跳转到带www的域上面](#跳转到带www的域上面)	
-  - [代理转发](#代理转发)	
-  - [监控状态信息](#监控状态信息)	
-  - [代理转发连接替换](#代理转发连接替换)	
-  - [ssl配置](#ssl配置)	
-  - [强制将http重定向到https](#强制将http重定向到https)	
-  - [两个虚拟主机](#两个虚拟主机)	
-  - [虚拟主机标准配置](#虚拟主机标准配置)	
-  - [爬虫过滤](#爬虫过滤)	
-  - [防盗链](#防盗链)	
-  - [虚拟目录配置](#虚拟目录配置)	
-  - [防盗图配置](#防盗图配置)	
-  - [屏蔽.git等文件](#屏蔽git等文件)	
-  - [域名路径加不加需要都能正常访问](#域名路径加不加需要都能正常访问)	
-- [错误问题](#错误问题)	
-- [精品文章参考](#精品文章参考)
+## 目录
 
-## 安装
+* [安装](./#安装)    
+  * [安装依赖](./#安装依赖)    
+  * [下载](./#下载)    
+  * [编译安装](./#编译安装)    
+  * [nginx测试](./#nginx测试)    
+  * [设置全局nginx命令](./#设置全局nginx命令)    
+* [Mac 安装](./#mac-安装)    
+  * [安装nginx](./#安装nginx)    
+  * [启动服务](./#启动服务)    
+* [开机自启动](./#开机自启动)    
+* [运维](./#运维)    
+  * [服务管理](./#服务管理)    
+  * [重启服务防火墙报错解决](./#重启服务防火墙报错解决)    
+* [nginx卸载](./#nginx卸载)    
+* [参数说明](./#参数说明)    
+* [配置](./#配置)    
+  * [常用正则](./#常用正则)    
+  * [全局变量](./#全局变量)    
+  * [符号参考](./#符号参考)    
+  * [配置文件](./#配置文件)    
+  * [内置预定义变量](./#内置预定义变量)    
+  * [反向代理](./#反向代理)    
+  * [负载均衡](./#负载均衡)    
+    * [RR](./#rr)    
+    * [权重](./#权重)    
+    * [ip\_hash](./#ip_hash)    
+    * [fair](./#fair)    
+    * [url\_hash](./#url_hash)    
+  * [屏蔽ip](./#屏蔽ip)    
+* [第三方模块安装方法](./#第三方模块安装方法)    
+* [重定向](./#重定向)    
+  * [重定向整个网站](./#重定向整个网站)    
+  * [重定向单页](./#重定向单页)    
+  * [重定向整个子路径](./#重定向整个子路径)    
+* [性能](./#性能)    
+  * [内容缓存](./#内容缓存)    
+  * [Gzip压缩](./#gzip压缩)    
+  * [打开文件缓存](./#打开文件缓存)    
+  * [SSL缓存](./#ssl缓存)    
+  * [上游Keepalive](./#上游keepalive)    
+  * [监控](./#监控)    
+* [常见使用场景](./#常见使用场景)    
+  * [跨域问题](./#跨域问题)    
+  * [跳转到带www的域上面](./#跳转到带www的域上面)    
+  * [代理转发](./#代理转发)    
+  * [监控状态信息](./#监控状态信息)    
+  * [代理转发连接替换](./#代理转发连接替换)    
+  * [ssl配置](./#ssl配置)    
+  * [强制将http重定向到https](./#强制将http重定向到https)    
+  * [两个虚拟主机](./#两个虚拟主机)    
+  * [虚拟主机标准配置](./#虚拟主机标准配置)    
+  * [爬虫过滤](./#爬虫过滤)    
+  * [防盗链](./#防盗链)    
+  * [虚拟目录配置](./#虚拟目录配置)    
+  * [防盗图配置](./#防盗图配置)    
+  * [屏蔽.git等文件](./#屏蔽git等文件)    
+  * [域名路径加不加需要都能正常访问](./#域名路径加不加需要都能正常访问)    
+* [错误问题](./#错误问题)    
+* [精品文章参考](./#精品文章参考)
 
-### 安装依赖
+### 安装
 
-> prce(重定向支持)和openssl(https支持，如果不需要https可以不安装。)
+#### 安装依赖
+
+> prce\(重定向支持\)和openssl\(https支持，如果不需要https可以不安装。\)
 
 ```bash
 yum install -y pcre-devel 
 yum -y install gcc make gcc-c++ wget
-yum -y install openssl openssl-devel 
+yum -y install openssl openssl-devel
 ```
 
 CentOS 6.5 我安装的时候是选择的“基本服务器”，默认这两个包都没安装全，所以这两个都运行安装即可。
 
-### 下载
+#### 下载
 
 [nginx的所有版本在这里](http://nginx.org/download/)
 
@@ -104,9 +100,9 @@ $ yum install wget
 tar zxf nginx-1.13.3.tar.gz
 ```
 
-### 编译安装
+#### 编译安装
 
-然后进入目录编译安装，[configure参数说明](#参数说明)
+然后进入目录编译安装，[configure参数说明](./#参数说明)
 
 ```bash
 cd nginx-1.11.5
@@ -142,7 +138,7 @@ make
 make install
 ```
 
-### nginx测试
+#### nginx测试
 
 运行下面命令会出现两个结果，一般情况nginx会安装在`/usr/local/nginx`目录中
 
@@ -154,7 +150,7 @@ cd /usr/local/nginx/sbin/
 # nginx: configuration file /usr/local/nginx/conf/nginx.conf test is successful
 ```
 
-### 设置全局nginx命令
+#### 设置全局nginx命令
 
 ```bash
 vi ~/.bash_profile
@@ -169,11 +165,11 @@ export PATH
 
 运行命令 **`source ~/.bash_profile`** 让配置立即生效。你就可以全局运行 `nginx` 命令了。
 
-## Mac 安装
+### Mac 安装
 
 Mac OSX 安装特别简单，首先你需要安装 [Brew](https://brew.sh/)， 通过 `brew` 快速安装 `nginx`。
 
-### 安装nginx
+#### 安装nginx
 
 ```bash
 brew install nginx
@@ -232,7 +228,7 @@ brew install nginx
 # cd /usr/local/Cellar/nginx/1.13.12/
 ```
 
-### 启动服务
+#### 启动服务
 
 注意默认端口不是 `8080` 查看确认端口是否被占用。
 
@@ -241,7 +237,7 @@ brew services start nginx
 # http://localhost:8080/
 ```
 
-## 开机自启动
+### 开机自启动
 
 **开机自启动方法一：**
 
@@ -266,15 +262,15 @@ PrivateTmp=true
 WantedBy=multi-user.target
 ```
 
-- `[Unit]`:服务的说明  
-- `Description`:描述服务  
-- `After`:描述服务类别  
-- `[Service]`服务运行参数的设置  
-- `Type=forking`是后台运行的形式  
-- `ExecStart`为服务的具体运行命令  
-- `ExecReload`为重启命令  
-- `ExecStop`为停止命令  
-- `PrivateTmp=True`表示给服务分配独立的临时空间  
+* `[Unit]`:服务的说明  
+* `Description`:描述服务  
+* `After`:描述服务类别  
+* `[Service]`服务运行参数的设置  
+* `Type=forking`是后台运行的形式  
+* `ExecStart`为服务的具体运行命令  
+* `ExecReload`为重启命令  
+* `ExecStop`为停止命令  
+* `PrivateTmp=True`表示给服务分配独立的临时空间  
 
 注意：`[Service]`的启动、重启、停止命令全部要求使用绝对路径。
 
@@ -313,7 +309,7 @@ systemctl status *.service # 查询服务运行状态
 systemctl --failed # 显示启动失败的服务
 ```
 
-注：*代表某个服务的名字，如http的服务名为httpd
+注：\*代表某个服务的名字，如http的服务名为httpd
 
 **开机自启动方法二：**
 
@@ -333,9 +329,9 @@ chmod +x /etc/rc.d/rc.local
 
 官方脚本 [ed Hat NGINX Init Script](https://www.nginx.com/resources/wiki/start/topics/examples/redhatnginxinit/)。
 
-## 运维
+### 运维
 
-### 服务管理
+#### 服务管理
 
 ```bash
 # 启动
@@ -351,7 +347,7 @@ chmod +x /etc/rc.d/rc.local
 /usr/local/nginx/sbin/nginx -s quit
 
 # 查看nginx的安装状态，
-/usr/local/nginx/sbin/nginx -V 
+/usr/local/nginx/sbin/nginx -V
 ```
 
 **关闭防火墙，或者添加防火墙规则就可以测试了**
@@ -380,8 +376,7 @@ service iptables restart
 iptables -t nat -L
 ```
 
-### 重启服务防火墙报错解决
-
+#### 重启服务防火墙报错解决
 
 ```bash
 service iptables restart
@@ -389,8 +384,7 @@ service iptables restart
 # Failed to restart iptables.service: Unit iptables.service failed to load: No such file or directory.
 ```
 
-在CentOS 7或RHEL 7或Fedora中防火墙由 **firewalld** 来管理，当然你可以还原传统的管理方式。或则使用新的命令进行管理。
-假如采用传统请执行一下命令：
+在CentOS 7或RHEL 7或Fedora中防火墙由 **firewalld** 来管理，当然你可以还原传统的管理方式。或则使用新的命令进行管理。 假如采用传统请执行一下命令：
 
 ```bash
 # 传统命令
@@ -406,8 +400,7 @@ systemctl enable iptables
 service iptables restart
 ```
 
-
-## nginx卸载
+### nginx卸载
 
 如果通过yum安装，使用下面命令安装。
 
@@ -415,54 +408,52 @@ service iptables restart
 yum remove nginx
 ```
 
-编译安装，删除/usr/local/nginx目录即可
-如果配置了自启动脚本，也需要删除。
+编译安装，删除/usr/local/nginx目录即可 如果配置了自启动脚本，也需要删除。
 
-
-## 参数说明
+### 参数说明
 
 | 参数 | 说明 |
-| ---- | ---- |
+| :--- | :--- |
 | --prefix=`<path>` | Nginx安装路径。如果没有指定，默认为 /usr/local/nginx。 |
 | --sbin-path=`<path>` | Nginx可执行文件安装路径。只能安装时指定，如果没有指定，默认为`<prefix>`/sbin/nginx。 |
 | --conf-path=`<path>` | 在没有给定-c选项下默认的nginx.conf的路径。如果没有指定，默认为`<prefix>`/conf/nginx.conf。 |
 | --pid-path=`<path>` | 在nginx.conf中没有指定pid指令的情况下，默认的nginx.pid的路径。如果没有指定，默认为 `<prefix>`/logs/nginx.pid。 |
 | --lock-path=`<path>` | nginx.lock文件的路径。 |
-| --error-log-path=`<path>` | 在nginx.conf中没有指定error_log指令的情况下，默认的错误日志的路径。如果没有指定，默认为 `<prefix>`/- logs/error.log。 |
-| --http-log-path=`<path>` | 在nginx.conf中没有指定access_log指令的情况下，默认的访问日志的路径。如果没有指定，默认为 `<prefix>`/- logs/access.log。 |
+| --error-log-path=`<path>` | 在nginx.conf中没有指定error\_log指令的情况下，默认的错误日志的路径。如果没有指定，默认为 `<prefix>`/- logs/error.log。 |
+| --http-log-path=`<path>` | 在nginx.conf中没有指定access\_log指令的情况下，默认的访问日志的路径。如果没有指定，默认为 `<prefix>`/- logs/access.log。 |
 | --user=`<user>` | 在nginx.conf中没有指定user指令的情况下，默认的nginx使用的用户。如果没有指定，默认为 nobody。 |
 | --group=`<group>` | 在nginx.conf中没有指定user指令的情况下，默认的nginx使用的组。如果没有指定，默认为 nobody。 |
 | --builddir=DIR | 指定编译的目录 |
-| --with-rtsig_module | 启用 rtsig 模块 |
-| --with-select_module --without-select_module | 允许或不允许开启SELECT模式，如果 configure 没有找到更合适的模式，比如：kqueue(sun os),epoll (linux kenel 2.6+), rtsig(- 实时信号)或者/dev/poll(一种类似select的模式，底层实现与SELECT基本相 同，都是采用轮训方法) SELECT模式将是默认安装模式|
-| --with-poll_module --without-poll_module | Whether or not to enable the poll module. This module is enabled by, default if a more suitable method such as kqueue, epoll, rtsig or /dev/poll is not discovered by configure. |
-| --with-http_ssl_module | Enable ngx_http_ssl_module. Enables SSL support and the ability to handle HTTPS requests. Requires OpenSSL. On Debian, this is libssl-dev. 开启HTTP SSL模块，使NGINX可以支持HTTPS请求。这个模块需要已经安装了OPENSSL，在DEBIAN上是libssl  |
-| --with-http_realip_module | 启用 ngx_http_realip_module |
-| --with-http_addition_module | 启用 ngx_http_addition_module |
-| --with-http_sub_module | 启用 ngx_http_sub_module |
-| --with-http_dav_module | 启用 ngx_http_dav_module |
-| --with-http_flv_module | 启用 ngx_http_flv_module |
-| --with-http_stub_status_module | 启用 "server status" 页 |
-| --without-http_charset_module | 禁用 ngx_http_charset_module |
-| --without-http_gzip_module | 禁用 ngx_http_gzip_module. 如果启用，需要 zlib 。 |
-| --without-http_ssi_module | 禁用 ngx_http_ssi_module |
-| --without-http_userid_module | 禁用 ngx_http_userid_module |
-| --without-http_access_module | 禁用 ngx_http_access_module |
-| --without-http_auth_basic_module | 禁用 ngx_http_auth_basic_module |
-| --without-http_autoindex_module | 禁用 ngx_http_autoindex_module |
-| --without-http_geo_module | 禁用 ngx_http_geo_module |
-| --without-http_map_module | 禁用 ngx_http_map_module |
-| --without-http_referer_module | 禁用 ngx_http_referer_module |
-| --without-http_rewrite_module | 禁用 ngx_http_rewrite_module. 如果启用需要 PCRE 。 |
-| --without-http_proxy_module | 禁用 ngx_http_proxy_module |
-| --without-http_fastcgi_module | 禁用 ngx_http_fastcgi_module |
-| --without-http_memcached_module | 禁用 ngx_http_memcached_module |
-| --without-http_limit_zone_module | 禁用 ngx_http_limit_zone_module |
-| --without-http_empty_gif_module | 禁用 ngx_http_empty_gif_module |
-| --without-http_browser_module | 禁用 ngx_http_browser_module |
-| --without-http_upstream_ip_hash_module | 禁用 ngx_http_upstream_ip_hash_module |
-| --with-http_perl_module | 启用 ngx_http_perl_module |
-| --with-perl_modules_path=PATH | 指定 perl 模块的路径 |
+| --with-rtsig\_module | 启用 rtsig 模块 |
+| --with-select\_module --without-select\_module | 允许或不允许开启SELECT模式，如果 configure 没有找到更合适的模式，比如：kqueue\(sun os\),epoll \(linux kenel 2.6+\), rtsig\(- 实时信号\)或者/dev/poll\(一种类似select的模式，底层实现与SELECT基本相 同，都是采用轮训方法\) SELECT模式将是默认安装模式 |
+| --with-poll\_module --without-poll\_module | Whether or not to enable the poll module. This module is enabled by, default if a more suitable method such as kqueue, epoll, rtsig or /dev/poll is not discovered by configure. |
+| --with-http\_ssl\_module | Enable ngx\_http\_ssl\_module. Enables SSL support and the ability to handle HTTPS requests. Requires OpenSSL. On Debian, this is libssl-dev. 开启HTTP SSL模块，使NGINX可以支持HTTPS请求。这个模块需要已经安装了OPENSSL，在DEBIAN上是libssl |
+| --with-http\_realip\_module | 启用 ngx\_http\_realip\_module |
+| --with-http\_addition\_module | 启用 ngx\_http\_addition\_module |
+| --with-http\_sub\_module | 启用 ngx\_http\_sub\_module |
+| --with-http\_dav\_module | 启用 ngx\_http\_dav\_module |
+| --with-http\_flv\_module | 启用 ngx\_http\_flv\_module |
+| --with-http\_stub\_status\_module | 启用 "server status" 页 |
+| --without-http\_charset\_module | 禁用 ngx\_http\_charset\_module |
+| --without-http\_gzip\_module | 禁用 ngx\_http\_gzip\_module. 如果启用，需要 zlib 。 |
+| --without-http\_ssi\_module | 禁用 ngx\_http\_ssi\_module |
+| --without-http\_userid\_module | 禁用 ngx\_http\_userid\_module |
+| --without-http\_access\_module | 禁用 ngx\_http\_access\_module |
+| --without-http\_auth\_basic\_module | 禁用 ngx\_http\_auth\_basic\_module |
+| --without-http\_autoindex\_module | 禁用 ngx\_http\_autoindex\_module |
+| --without-http\_geo\_module | 禁用 ngx\_http\_geo\_module |
+| --without-http\_map\_module | 禁用 ngx\_http\_map\_module |
+| --without-http\_referer\_module | 禁用 ngx\_http\_referer\_module |
+| --without-http\_rewrite\_module | 禁用 ngx\_http\_rewrite\_module. 如果启用需要 PCRE 。 |
+| --without-http\_proxy\_module | 禁用 ngx\_http\_proxy\_module |
+| --without-http\_fastcgi\_module | 禁用 ngx\_http\_fastcgi\_module |
+| --without-http\_memcached\_module | 禁用 ngx\_http\_memcached\_module |
+| --without-http\_limit\_zone\_module | 禁用 ngx\_http\_limit\_zone\_module |
+| --without-http\_empty\_gif\_module | 禁用 ngx\_http\_empty\_gif\_module |
+| --without-http\_browser\_module | 禁用 ngx\_http\_browser\_module |
+| --without-http\_upstream\_ip\_hash\_module | 禁用 ngx\_http\_upstream\_ip\_hash\_module |
+| --with-http\_perl\_module | 启用 ngx\_http\_perl\_module |
+| --with-perl\_modules\_path=PATH | 指定 perl 模块的路径 |
 | --with-perl=PATH | 指定 perl 执行文件的路径 |
 | --http-log-path=PATH | Set path to the http access log |
 | --http-client-body-temp-path=PATH | Set path to the http client request body temporary files |
@@ -470,10 +461,10 @@ yum remove nginx
 | --http-fastcgi-temp-path=PATH | Set path to the http fastcgi temporary files |
 | --without-http | 禁用 HTTP server |
 | --with-mail | 启用 IMAP4/POP3/SMTP 代理模块 |
-| --with-mail_ssl_module | 启用 ngx_mail_ssl_module |
+| --with-mail\_ssl\_module | 启用 ngx\_mail\_ssl\_module |
 | --with-cc=PATH | 指定 C 编译器的路径 |
 | --with-cpp=PATH | 指定 C 预处理器的路径 |
-| --with-cc-opt=OPTIONS | Additional parameters which will be added to the variable CFLAGS. With the use of the system library PCRE in FreeBSD, it is necessary to indicate --with-cc-opt="-I /usr/local/include". If we are using select() and it is necessary to increase the number of file descriptors, then this also can be assigned here: --with-cc-opt="-D FD_SETSIZE=2048". |
+| --with-cc-opt=OPTIONS | Additional parameters which will be added to the variable CFLAGS. With the use of the system library PCRE in FreeBSD, it is necessary to indicate --with-cc-opt="-I /usr/local/include". If we are using select\(\) and it is necessary to increase the number of file descriptors, then this also can be assigned here: --with-cc-opt="-D FD\_SETSIZE=2048". |
 | --with-ld-opt=OPTIONS | Additional parameters passed to the linker. With the use of the system library PCRE in - FreeBSD, it is necessary to indicate --with-ld-opt="-L /usr/local/lib". |
 | --with-cpu-opt=CPU | 为特定的 CPU 编译，有效的值包括：pentium, pentiumpro, pentium3, pentium4, athlon, opteron, amd64, sparc32, sparc64, ppc64 |
 | --without-pcre | 禁止 PCRE 库的使用。同时也会禁止 HTTP rewrite 模块。在 "location" 配置指令中的正则表达式也需要 PCRE 。 |
@@ -493,85 +484,82 @@ yum remove nginx
 | --with-debug | 启用调试日志 |
 | --add-module=PATH | Add in a third-party module found in directory PATH |
 
-
-## 配置
+### 配置
 
 在Centos 默认配置文件在 **/usr/local/nginx-1.5.1/conf/nginx.conf** 我们要在这里配置一些文件。nginx.conf是主配置文件，由若干个部分组成，每个大括号`{}`表示一个部分。每一行指令都由分号结束`;`，标志着一行的结束。
 
-### 常用正则
+#### 常用正则
 
 | 正则 | 说明 | 正则 | 说明 |
-| ---- | ---- | ---- | ---- | 
-| `. ` | 匹配除换行符以外的任意字符 | `$ ` | 匹配字符串的结束 |
-| `? ` | 重复0次或1次 | `{n} ` | 重复n次 |
-| `+ ` | 重复1次或更多次 | `{n,} ` | 重复n次或更多次 |
-| `*` | 重复0次或更多次 | `[c] ` | 匹配单个字符c |
-| `\d ` |匹配数字 | `[a-z]` | 匹配a-z小写字母的任意一个 |
-| `^ ` | 匹配字符串的开始 | - | - |
+| :--- | :--- | :--- | :--- |
+| `.` | 匹配除换行符以外的任意字符 | `$` | 匹配字符串的结束 |
+| `?` | 重复0次或1次 | `{n}` | 重复n次 |
+| `+` | 重复1次或更多次 | `{n,}` | 重复n次或更多次 |
+| `*` | 重复0次或更多次 | `[c]` | 匹配单个字符c |
+| `\d` | 匹配数字 | `[a-z]` | 匹配a-z小写字母的任意一个 |
+| `^` | 匹配字符串的开始 | - | - |
 
-### 全局变量
+#### 全局变量
 
 | 变量 | 说明 | 变量 | 说明 |
-| ---- | ---- | ---- | ---- | 
-| $args | 这个变量等于请求行中的参数，同$query_string | $remote_port | 客户端的端口。 |
-| $content_length | 请求头中的Content-length字段。 | $remote_user | 已经经过Auth Basic Module验证的用户名。 |
-| $content_type | 请求头中的Content-Type字段。 | $request_filename | 当前请求的文件路径，由root或alias指令与URI请求生成。 |
-| $document_root | 当前请求在root指令中指定的值。 | $scheme | HTTP方法（如http，https）。 |
-| $host | 请求主机头字段，否则为服务器名称。 | $server_protocol | 请求使用的协议，通常是HTTP/1.0或HTTP/1.1。 |
-| $http_user_agent | 客户端agent信息 | $server_addr | 服务器地址，在完成一次系统调用后可以确定这个值。 |
-| $http_cookie | 客户端cookie信息 | $server_name | 服务器名称。 |
-| $limit_rate | 这个变量可以限制连接速率。 | $server_port | 请求到达服务器的端口号。 |
-| $request_method | 客户端请求的动作，通常为GET或POST。 | $request_uri | 包含请求参数的原始URI，不包含主机名，如：/foo/bar.php?arg=baz。 |
-| $remote_addr | 客户端的IP地址。 | $uri | 不带请求参数的当前URI，$uri不包含主机名，如/foo/bar.html。 |
-| $document_uri | 与$uri相同。 | - | - |
+| :--- | :--- | :--- | :--- |
+| $args | 这个变量等于请求行中的参数，同$query\_string | $remote\_port | 客户端的端口。 |
+| $content\_length | 请求头中的Content-length字段。 | $remote\_user | 已经经过Auth Basic Module验证的用户名。 |
+| $content\_type | 请求头中的Content-Type字段。 | $request\_filename | 当前请求的文件路径，由root或alias指令与URI请求生成。 |
+| $document\_root | 当前请求在root指令中指定的值。 | $scheme | HTTP方法（如http，https）。 |
+| $host | 请求主机头字段，否则为服务器名称。 | $server\_protocol | 请求使用的协议，通常是HTTP/1.0或HTTP/1.1。 |
+| $http\_user\_agent | 客户端agent信息 | $server\_addr | 服务器地址，在完成一次系统调用后可以确定这个值。 |
+| $http\_cookie | 客户端cookie信息 | $server\_name | 服务器名称。 |
+| $limit\_rate | 这个变量可以限制连接速率。 | $server\_port | 请求到达服务器的端口号。 |
+| $request\_method | 客户端请求的动作，通常为GET或POST。 | $request\_uri | 包含请求参数的原始URI，不包含主机名，如：/foo/bar.php?arg=baz。 |
+| $remote\_addr | 客户端的IP地址。 | $uri | 不带请求参数的当前URI，$uri不包含主机名，如/foo/bar.html。 |
+| $document\_uri | 与$uri相同。 | - | - |
 
 例如请求：`http://localhost:3000/test1/test2/test.php`
 
 $host：localhost  
-$server_port：3000  
-$request_uri：/test1/test2/test.php  
-$document_uri：/test1/test2/test.php  
-$document_root：/var/www/html  
-$request_filename：/var/www/html/test1/test2/test.php  
+$server\_port：3000  
+$request\_uri：/test1/test2/test.php  
+$document\_uri：/test1/test2/test.php  
+$document\_root：/var/www/html  
+$request\_filename：/var/www/html/test1/test2/test.php
 
-### 符号参考
+#### 符号参考
 
 | 符号 | 说明 | 符号 | 说明 | 符号 | 说明 |
-| ---- | ---- | ---- | ---- | ---- | ---- |
+| :--- | :--- | :--- | :--- | :--- | :--- |
 | k,K | 千字节 | m,M | 兆字节 | ms | 毫秒 |
-| s | 秒 | m | 分钟 | h |  小时 |
-| d | 日 | w | 周 | M |  一个月, 30天 |
+| s | 秒 | m | 分钟 | h | 小时 |
+| d | 日 | w | 周 | M | 一个月, 30天 |
 
 例如，"8k"，"1m" 代表字节数计量。  
-例如，"1h 30m"，"1y 6M"。代表 "1小时 30分"，"1年零6个月"。 
+例如，"1h 30m"，"1y 6M"。代表 "1小时 30分"，"1年零6个月"。
 
-### 配置文件
+#### 配置文件
 
 nginx 的配置系统由一个主配置文件和其他一些辅助的配置文件构成。这些配置文件均是纯文本文件，全部位于 nginx 安装目录下的 conf 目录下。
 
-指令由 nginx 的各个模块提供，不同的模块会提供不同的指令来实现配置。
-指令除了 Key-Value 的形式，还有作用域指令。
+指令由 nginx 的各个模块提供，不同的模块会提供不同的指令来实现配置。 指令除了 Key-Value 的形式，还有作用域指令。
 
 nginx.conf 中的配置信息，根据其逻辑上的意义，对它们进行了分类，也就是分成了多个作用域，或者称之为配置指令上下文。不同的作用域含有一个或者多个配置项。
 
 下面的这些上下文指令是用的比较多：
 
-| Directive |  Description | Contains Directive |
-| ---- | ---- | ---- |
-| main  |  nginx 在运行时与具体业务功能（比如 http 服务或者 email 服务代理）无关的一些参数，比如工作进程数，运行的身份等。 | user, worker_processes, error_log, events, http, mail |
-| http  |  与提供 http 服务相关的一些配置参数。例如：是否使用 keepalive 啊，是否使用 gzip 进行压缩等。 |  server |
-| server | http 服务上支持若干虚拟主机。每个虚拟主机一个对应的 server 配置项，配置项里面包含该虚拟主机相关的配置。在提供 mail 服务的代理时，也可以建立若干 server. 每个 server 通过监听的地址来区分。| listen, server_name, access_log, location, protocol, proxy, smtp_auth, xclient |
-| location  |  http 服务中，某些特定的 URL 对应的一系列配置项。  | index, root |
-| mail | 实现 email 相关的 SMTP/IMAP/POP3 代理时，共享的一些配置项（因为可能实现多个代理，工作在多个监听地址上）。 | server, http, imap_capabilities |
+| Directive | Description | Contains Directive |
+| :--- | :--- | :--- |
+| main | nginx 在运行时与具体业务功能（比如 http 服务或者 email 服务代理）无关的一些参数，比如工作进程数，运行的身份等。 | user, worker\_processes, error\_log, events, http, mail |
+| http | 与提供 http 服务相关的一些配置参数。例如：是否使用 keepalive 啊，是否使用 gzip 进行压缩等。 | server |
+| server | http 服务上支持若干虚拟主机。每个虚拟主机一个对应的 server 配置项，配置项里面包含该虚拟主机相关的配置。在提供 mail 服务的代理时，也可以建立若干 server. 每个 server 通过监听的地址来区分。 | listen, server\_name, access\_log, location, protocol, proxy, smtp\_auth, xclient |
+| location | http 服务中，某些特定的 URL 对应的一系列配置项。 | index, root |
+| mail | 实现 email 相关的 SMTP/IMAP/POP3 代理时，共享的一些配置项（因为可能实现多个代理，工作在多个监听地址上）。 | server, http, imap\_capabilities |
 | include | 以便增强配置文件的可读性，使得部分配置文件可以重新使用。 | - |
-| valid_referers | 用来校验Http请求头Referer是否有效。 | - |
-| try_files | 用在server部分，不过最常见的还是用在location部分，它会按照给定的参数顺序进行尝试，第一个被匹配到的将会被使用。 | - |
+| valid\_referers | 用来校验Http请求头Referer是否有效。 | - |
+| try\_files | 用在server部分，不过最常见的还是用在location部分，它会按照给定的参数顺序进行尝试，第一个被匹配到的将会被使用。 | - |
 | if | 当在location块中使用if指令，在某些情况下它并不按照预期运行，一般来说避免使用if指令。 | - |
-
 
 例如我们再 **nginx.conf** 里面引用两个配置 vhost/example.com.conf 和 vhost/gitlab.com.conf 它们都被放在一个我自己新建的目录 vhost 下面。nginx.conf 配置如下：
 
-```nginx
+```text
 worker_processes  1;
 events {
     worker_connections  1024;
@@ -611,10 +599,9 @@ http {
 }
 ```
 
-
 简单的配置: example.com.conf
 
-```nginx
+```text
 server {
     #侦听的80端口
     listen       80;
@@ -624,29 +611,29 @@ server {
 }
 ```
 
-### 内置预定义变量
+#### 内置预定义变量
 
 Nginx提供了许多预定义的变量，也可以通过使用set来设置变量。你可以在if中使用预定义变量，也可以将它们传递给代理服务器。以下是一些常见的预定义变量，[更多详见](http://nginx.org/en/docs/varindex.html)
 
-| 变量名称  |  值 |
-| ----  | ---- |
-| $args_name | 在请求中的name参数 |
-| $args      | 所有请求参数 |
-| $query_string   | $args的别名 |
-| $content_length | 请求头Content-Length的值 |
-| $content_type   | 请求头Content-Type的值 |
-| $host |  如果当前有Host，则为请求头Host的值；如果没有这个头，那么该值等于匹配该请求的server_name的值 |
-| $remote_addr  |  客户端的IP地址 |
-| $request      |  完整的请求，从客户端收到，包括Http请求方法、URI、Http协议、头、请求体 |
-| $request_uri  |  完整请求的URI，从客户端来的请求，包括参数 |
+| 变量名称 | 值 |
+| :--- | :--- |
+| $args\_name | 在请求中的name参数 |
+| $args | 所有请求参数 |
+| $query\_string | $args的别名 |
+| $content\_length | 请求头Content-Length的值 |
+| $content\_type | 请求头Content-Type的值 |
+| $host | 如果当前有Host，则为请求头Host的值；如果没有这个头，那么该值等于匹配该请求的server\_name的值 |
+| $remote\_addr | 客户端的IP地址 |
+| $request | 完整的请求，从客户端收到，包括Http请求方法、URI、Http协议、头、请求体 |
+| $request\_uri | 完整请求的URI，从客户端来的请求，包括参数 |
 | $scheme | 当前请求的协议 |
-| $uri    | 当前请求的标准化URI |
+| $uri | 当前请求的标准化URI |
 
-### 反向代理
+#### 反向代理
 
 反向代理是一个Web服务器，它接受客户端的连接请求，然后将请求转发给上游服务器，并将从服务器得到的结果返回给连接的客户端。下面简单的反向代理的例子：
 
-```nginx
+```text
 server {  
   listen       80;                                                        
   server_name  localhost;                                              
@@ -663,7 +650,7 @@ server {
 
 复杂的配置: gitlab.com.conf。
 
-```nginx
+```text
 server {
     #侦听的80端口
     listen       80;
@@ -686,26 +673,26 @@ server {
 }
 ```
 
-代理到上游服务器的配置中，最重要的是proxy_pass指令。以下是代理模块中的一些常用指令：
+代理到上游服务器的配置中，最重要的是proxy\_pass指令。以下是代理模块中的一些常用指令：
 
 | 指令 | 说明 |
-| ---- | ---- |
-| proxy_connect_timeout  | Nginx从接受请求至连接到上游服务器的最长等待时间 |
-| proxy_send_timeout  | 后端服务器数据回传时间(代理发送超时) |
-| proxy_read_timeout  | 连接成功后，后端服务器响应时间(代理接收超时) |
-| proxy_cookie_domain | 替代从上游服务器来的Set-Cookie头的domain属性 |
-| proxy_cookie_path   | 替代从上游服务器来的Set-Cookie头的path属性 |
-| proxy_buffer_size   | 设置代理服务器（nginx）保存用户头信息的缓冲区大小 |
-| proxy_buffers       | proxy_buffers缓冲区，网页平均在多少k以下 |
-| proxy_set_header    | 重写发送到上游服务器头的内容，也可以通过将某个头部的值设置为空字符串，而不发送某个头部的方法实现 |
-| proxy_ignore_headers | 这个指令禁止处理来自代理服务器的应答。 | 
-| proxy_intercept_errors | 使nginx阻止HTTP应答代码为400或者更高的应答。 | 
+| :--- | :--- |
+| proxy\_connect\_timeout | Nginx从接受请求至连接到上游服务器的最长等待时间 |
+| proxy\_send\_timeout | 后端服务器数据回传时间\(代理发送超时\) |
+| proxy\_read\_timeout | 连接成功后，后端服务器响应时间\(代理接收超时\) |
+| proxy\_cookie\_domain | 替代从上游服务器来的Set-Cookie头的domain属性 |
+| proxy\_cookie\_path | 替代从上游服务器来的Set-Cookie头的path属性 |
+| proxy\_buffer\_size | 设置代理服务器（nginx）保存用户头信息的缓冲区大小 |
+| proxy\_buffers | proxy\_buffers缓冲区，网页平均在多少k以下 |
+| proxy\_set\_header | 重写发送到上游服务器头的内容，也可以通过将某个头部的值设置为空字符串，而不发送某个头部的方法实现 |
+| proxy\_ignore\_headers | 这个指令禁止处理来自代理服务器的应答。 |
+| proxy\_intercept\_errors | 使nginx阻止HTTP应答代码为400或者更高的应答。 |
 
-### 负载均衡
+#### 负载均衡
 
 upstream指令启用一个新的配置区段，在该区段定义一组上游服务器。这些服务器可能被设置不同的权重，也可能出于对服务器进行维护，标记为down。
 
-```nginx
+```text
 upstream gitlab {
     ip_hash;
     # upstream的负载均衡，weight是权重，可以根据机器配置定义权重。weigth参数表示权值，权值越高被分配到的几率越大。
@@ -748,14 +735,14 @@ server {
 upstream模块能够使用3种负载均衡算法：轮询、IP哈希、最少连接数。
 
 **轮询：** 默认情况下使用轮询算法，不需要配置指令来激活它，它是基于在队列中谁是下一个的原理确保访问均匀地分布到每个上游服务器；  
-**IP哈希：** 通过ip_hash指令来激活，Nginx通过IPv4地址的前3个字节或者整个IPv6地址作为哈希键来实现，同一个IP地址总是能被映射到同一个上游服务器；  
-**最少连接数：** 通过least_conn指令来激活，该算法通过选择一个活跃数最少的上游服务器进行连接。如果上游服务器处理能力不同，可以通过给server配置weight权重来说明，该算法将考虑到不同服务器的加权最少连接数。
+**IP哈希：** 通过ip\_hash指令来激活，Nginx通过IPv4地址的前3个字节或者整个IPv6地址作为哈希键来实现，同一个IP地址总是能被映射到同一个上游服务器；  
+**最少连接数：** 通过least\_conn指令来激活，该算法通过选择一个活跃数最少的上游服务器进行连接。如果上游服务器处理能力不同，可以通过给server配置weight权重来说明，该算法将考虑到不同服务器的加权最少连接数。
 
-#### RR
+**RR**
 
 **简单配置** ，这里我配置了2台服务器，当然实际上是一台，只是端口不一样而已，而8081的服务器是不存在的，也就是说访问不到，但是我们访问 `http://localhost` 的时候，也不会有问题，会默认跳转到`http://localhost:8080`具体是因为Nginx会自动判断服务器的状态，如果服务器处于不能访问（服务器挂了），就不会跳转到这台服务器，所以也避免了一台服务器挂了影响使用的情况，由于Nginx默认是RR策略，所以我们不需要其他更多的设置
 
-```nginx
+```text
 upstream test {
     server localhost:8080;
     server localhost:8081;
@@ -764,7 +751,7 @@ server {
     listen       81;
     server_name  localhost;
     client_max_body_size 1024M;
- 
+
     location / {
         proxy_pass http://test;
         proxy_set_header Host $host:$server_port;
@@ -772,20 +759,20 @@ server {
 }
 ```
 
-**负载均衡的核心代码为** 
+**负载均衡的核心代码为**
 
-```nginx
+```text
 upstream test {
     server localhost:8080;
     server localhost:8081;
 }
 ```
 
-#### 权重
+**权重**
 
 指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。 例如
 
-```nginx
+```text
 upstream test {
     server localhost:8080 weight=9;
     server localhost:8081 weight=1;
@@ -794,11 +781,11 @@ upstream test {
 
 那么10次一般只会有1次会访问到8081，而有9次会访问到8080
 
-#### ip_hash
+**ip\_hash**
 
 上面的2种方式都有一个问题，那就是下一个请求来的时候请求可能分发到另外一个服务器，当我们的程序不是无状态的时候（采用了session保存数据），这时候就有一个很大的很问题了，比如把登录信息保存到了session中，那么跳转到另外一台服务器的时候就需要重新登录了，所以很多时候我们需要一个客户只访问一个服务器，那么就需要用iphash了，iphash的每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。
 
-```nginx
+```text
 upstream test {
     ip_hash;
     server localhost:8080;
@@ -806,11 +793,11 @@ upstream test {
 }
 ```
 
-#### fair
+**fair**
 
 这是个第三方模块，按后端服务器的响应时间来分配请求，响应时间短的优先分配。
 
-```nginx
+```text
 upstream backend {
     fair;
     server localhost:8080;
@@ -818,11 +805,11 @@ upstream backend {
 }
 ```
 
-#### url_hash
+**url\_hash**
 
-这是个第三方模块，按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。 在upstream中加入hash语句，server语句中不能写入weight等其他的参数，hash_method是使用的hash算法
+这是个第三方模块，按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。 在upstream中加入hash语句，server语句中不能写入weight等其他的参数，hash\_method是使用的hash算法
 
-```nginx
+```text
 upstream backend {
     hash $request_uri;
     hash_method crc32;
@@ -831,13 +818,13 @@ upstream backend {
 }
 ```
 
-以上5种负载均衡各自适用不同情况下使用，所以可以根据实际情况选择使用哪种策略模式，不过fair和url_hash需要安装第三方模块才能使用
+以上5种负载均衡各自适用不同情况下使用，所以可以根据实际情况选择使用哪种策略模式，不过fair和url\_hash需要安装第三方模块才能使用
 
 **server指令可选参数：**
 
 1. weight：设置一个服务器的访问权重，数值越高，收到的请求也越多；
-2. fail_timeout：在这个指定的时间内服务器必须提供响应，如果在这个时间内没有收到响应，那么服务器将会被标记为down状态；
-3. max_fails：设置在fail_timeout时间之内尝试对一个服务器连接的最大次数，如果超过这个次数，那么服务器将会被标记为down;
+2. fail\_timeout：在这个指定的时间内服务器必须提供响应，如果在这个时间内没有收到响应，那么服务器将会被标记为down状态；
+3. max\_fails：设置在fail\_timeout时间之内尝试对一个服务器连接的最大次数，如果超过这个次数，那么服务器将会被标记为down;
 4. down：标记一个服务器不再接受任何请求；
 5. backup：一旦其他服务器宕机，那么有该标记的机器将会接收请求。
 
@@ -845,17 +832,17 @@ upstream backend {
 
 Nginx服务器将会为每一个worker进行保持同上游服务器的连接。
 
-### 屏蔽ip
+#### 屏蔽ip
 
-在nginx的配置文件`nginx.conf`中加入如下配置，可以放到http, server, location, limit_except语句块，需要注意相对路径，本例当中`nginx.conf`，`blocksip.conf`在同一个目录中。
+在nginx的配置文件`nginx.conf`中加入如下配置，可以放到http, server, location, limit\_except语句块，需要注意相对路径，本例当中`nginx.conf`，`blocksip.conf`在同一个目录中。
 
-```nginx
+```text
 include blockip.conf;
 ```
 
 在blockip.conf里面输入内容，如：
 
-```nginx
+```text
 deny 165.91.122.67;
 
 deny IP;   # 屏蔽单个ip访问
@@ -869,32 +856,32 @@ deny 123.45.6.0/24 # 屏蔽IP段即从123.45.6.1到123.45.6.254访问的命令
 # 如果你想实现这样的应用，除了几个IP外，其他全部拒绝
 allow 1.1.1.1; 
 allow 1.1.1.2;
-deny all; 
+deny all;
 ```
 
-## 第三方模块安装方法
+### 第三方模块安装方法
 
-```
+```text
 ./configure --prefix=/你的安装目录  --add-module=/第三方模块目录
 ```
 
-## 重定向
+### 重定向
 
-- `permanent` 永久性重定向。请求日志中的状态码为301
-- `redirect` 临时重定向。请求日志中的状态码为302
+* `permanent` 永久性重定向。请求日志中的状态码为301
+* `redirect` 临时重定向。请求日志中的状态码为302
 
-### 重定向整个网站
+#### 重定向整个网站
 
-```nginx
+```text
 server {
     server_name old-site.com
     return 301 $scheme://new-site.com$request_uri;
 }
 ```
 
-### 重定向单页
+#### 重定向单页
 
-```nginx
+```text
 server {
     location = /oldpage.html {
         return 301 http://example.org/newpage.html;
@@ -902,21 +889,21 @@ server {
 }
 ```
 
-### 重定向整个子路径
+#### 重定向整个子路径
 
-```nginx
+```text
 location /old-site {
     rewrite ^/old-site/(.*) http://example.org/new-site/$1 permanent;
 }
 ```
 
-## 性能
+### 性能
 
-### 内容缓存
+#### 内容缓存
 
 允许浏览器基本上永久地缓存静态内容。 Nginx将为您设置Expires和Cache-Control头信息。
 
-```nginx
+```text
 location /static {
     root /data;
     expires max;
@@ -925,16 +912,16 @@ location /static {
 
 如果要求浏览器永远不会缓存响应（例如用于跟踪请求），请使用-1。
 
-```nginx
+```text
 location = /empty.gif {
     empty_gif;
     expires -1;
 }
 ```
 
-### Gzip压缩
+#### Gzip压缩
 
-```nginx
+```text
 gzip  on;
 gzip_buffers 16 8k;
 gzip_comp_level 6;
@@ -952,25 +939,25 @@ gzip_types
 gzip_disable  "msie6";
 ```
 
-### 打开文件缓存
+#### 打开文件缓存
 
-```nginx
+```text
 open_file_cache max=1000 inactive=20s;
 open_file_cache_valid 30s;
 open_file_cache_min_uses 2;
 open_file_cache_errors on;
 ```
 
-### SSL缓存
+#### SSL缓存
 
-```nginx
+```text
 ssl_session_cache shared:SSL:10m;
 ssl_session_timeout 10m;
 ```
 
-### 上游Keepalive
+#### 上游Keepalive
 
-```nginx
+```text
 upstream backend {
     server 127.0.0.1:8080;
     keepalive 32;
@@ -985,7 +972,7 @@ server {
 }
 ```
 
-### 监控
+#### 监控
 
 使用`ngxtop`实时解析nginx访问日志，并且将处理结果输出到终端，功能类似于系统命令top。所有示例都读取nginx配置文件的访问日志位置和格式。如果要指定访问日志文件和/或日志格式，请使用-f和-a选项。
 
@@ -1016,17 +1003,17 @@ ngxtop avg bytes_sent --filter 'status == 200 and request_path.startswith("foo")
 ssh remote tail -f /var/log/apache2/access.log | ngxtop -f common
 ```
 
-## 常见使用场景
+### 常见使用场景
 
-### 跨域问题
+#### 跨域问题
 
-在工作中，有时候会遇到一些接口不支持跨域，这时候可以简单的添加add_headers来支持cors跨域。配置如下：
+在工作中，有时候会遇到一些接口不支持跨域，这时候可以简单的添加add\_headers来支持cors跨域。配置如下：
 
-```nginx
+```text
 server {
   listen 80;
   server_name api.xxx.com;
-    
+
   add_header 'Access-Control-Allow-Origin' '*';
   add_header 'Access-Control-Allow-Credentials' 'true';
   add_header 'Access-Control-Allow-Methods' 'GET,POST,HEAD';
@@ -1042,7 +1029,7 @@ server {
 
 上面更改头信息，还有一种，使用 [rewrite](http://nginx.org/en/docs/http/ngx_http_rewrite_module.html) 指令重定向URI来解决跨域问题。
 
-```nginx
+```text
 upstream test {
   server 127.0.0.1:8080;
   server localhost:8081;
@@ -1062,7 +1049,7 @@ server {
     # rewrite后面的参数是一个简单的正则 ^/api/(.*)$，
     # $1代表正则中的第一个()，$2代表第二个()的值，以此类推。
     rewrite ^/api/(.*)$ /$1 break;
-    
+
     # 把请求代理到其他主机 
     # 其中 http://www.b.com/ 写法和 http://www.b.com写法的区别如下
     # 如果你的请求地址是他 http://server/html/test.jsp
@@ -1083,9 +1070,9 @@ server {
 }
 ```
 
-### 跳转到带www的域上面
+#### 跳转到带www的域上面
 
-```nginx
+```text
 server {
     listen 80;
     # 配置正常的带www的域名
@@ -1103,9 +1090,9 @@ server {
 }
 ```
 
-### 代理转发
+#### 代理转发
 
-```nginx
+```text
 upstream server-api{
     # api 代理服务地址
     server 127.0.0.1:3110;    
@@ -1137,62 +1124,61 @@ server {
     # 这个方式使用场景，你在写React或者Vue项目的时候，没有真实路由
     location / {
         try_files $uri $uri/ /index.html =404;
-        #                               ^ 空格很重要
-    }
+        #                               ^ 空格很重要
+    }
 }
 ```
 
-### 监控状态信息
+#### 监控状态信息
 
 通过 `nginx -V` 来查看是否有 `with-http_stub_status_module` 该模块。
 
 > `nginx -V` 这里 `V` 是大写的，如果是小写的 `v` 即 `nginx -v`，则不会出现有哪些模块，只会出现 `nginx` 的版本
 
-```nginx
+```text
 location /nginx_status {
     stub_status on;
     access_log off;
 }
 ```
 
-通过 http://127.0.0.1/nginx_status 访问出现下面结果。
+通过 [http://127.0.0.1/nginx\_status](http://127.0.0.1/nginx_status) 访问出现下面结果。
 
 ```bash
 Active connections: 3
 server accepts handled requests
  7 7 5 
-Reading: 0 Writing: 1 Waiting: 2 
+Reading: 0 Writing: 1 Waiting: 2
 ```
 
-1. 主动连接(第 1 行)
+1. 主动连接\(第 1 行\)
 
 当前与http建立的连接数，包括等待的客户端连接：3
 
-2. 服务器接受处理的请求(第 2~3 行)
+1. 服务器接受处理的请求\(第 2~3 行\)
 
 接受的客户端连接总数目：7  
 处理的客户端连接总数目：7  
-客户端总的请求数目：5  
+客户端总的请求数目：5
 
-3. 读取其它信(第 4 行)
+1. 读取其它信\(第 4 行\)
 
 当前，nginx读请求连接  
 当前，nginx写响应返回给客户端  
-目前有多少空闲客户端请求连接  
+目前有多少空闲客户端请求连接
 
-### 代理转发连接替换
+#### 代理转发连接替换
 
-```nginx
+```text
 location ^~/api/upload {
     rewrite ^/(.*)$ /wfs/v1/upload break;
     proxy_pass http://wfs-api;
 }
 ```
 
-### ssl配置
+#### ssl配置
 
 超文本传输安全协议（缩写：HTTPS，英语：Hypertext Transfer Protocol Secure）是超文本传输协议和SSL/TLS的组合，用以提供加密通讯及对网络服务器身份的鉴定。HTTPS连接经常被用于万维网上的交易支付和企业信息系统中敏感信息的传输。HTTPS不应与在RFC 2660中定义的安全超文本传输协议（S-HTTP）相混。HTTPS 目前已经是所有注重隐私和安全的网站的首选，随着技术的不断发展，HTTPS 网站已不再是大型网站的专利，所有普通的个人站长和博客均可以自己动手搭建一个安全的加密的网站。
-
 
 创建SSL证书，如果你购买的证书，就可以直接下载
 
@@ -1229,13 +1215,13 @@ Email Address []:admin@your_domain.com
 
 查看目前nginx编译选项
 
-```
+```text
 sbin/nginx -V
 ```
 
 输出下面内容
 
-```
+```text
 nginx version: nginx/1.7.8
 built by gcc 4.4.7 20120313 (Red Hat 4.4.7-4) (GCC)
 TLS SNI support enabled
@@ -1248,7 +1234,7 @@ configure arguments: --prefix=/usr/local/nginx-1.7.8 --with-http_ssl_module --wi
 ./configure --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module
 ```
 
-运行完成之后还需要`make` (不用make install)
+运行完成之后还需要`make` \(不用make install\)
 
 ```bash
 # 备份nginx的二进制文件
@@ -1259,7 +1245,7 @@ cp -rf objs/nginx   /usr/local/nginx/sbin/
 
 HTTPS server
 
-```nginx
+```text
 server {
     listen       443 ssl;
     server_name  localhost;
@@ -1288,9 +1274,9 @@ server {
 }
 ```
 
-### 强制将http重定向到https
+#### 强制将http重定向到https
 
-```nginx
+```text
 server {
     listen       80;
     server_name  example.com;
@@ -1300,11 +1286,11 @@ server {
 }
 ```
 
-### 两个虚拟主机
+#### 两个虚拟主机
 
 纯静态-html 支持
 
-```nginx
+```text
 http {
     server {
         listen          80;
@@ -1327,9 +1313,9 @@ http {
 }
 ```
 
-### 虚拟主机标准配置
+#### 虚拟主机标准配置
 
-```nginx
+```text
 http {
   server {
     listen          80 default;
@@ -1343,13 +1329,13 @@ http {
 }
 ```
 
-### 爬虫过滤
+#### 爬虫过滤
 
-根据 `User-Agent` 过滤请求，通过一个简单的正则表达式，就可以过滤不符合要求的爬虫请求(初级爬虫)。
+根据 `User-Agent` 过滤请求，通过一个简单的正则表达式，就可以过滤不符合要求的爬虫请求\(初级爬虫\)。
 
 > `~*` 表示不区分大小写的正则匹配
 
-```nginx
+```text
 location / {
     if ($http_user_agent ~* "python|curl|java|wget|httpclient|okhttp") {
         return 503;
@@ -1359,9 +1345,9 @@ location / {
 }
 ```
 
-### 防盗链
+#### 防盗链
 
-```nginx
+```text
 location ~* \.(gif|jpg|png|swf|flv)$ {
    root html
    valid_referers none blocked *.nginxcn.com;
@@ -1372,11 +1358,11 @@ location ~* \.(gif|jpg|png|swf|flv)$ {
 }
 ```
 
-### 虚拟目录配置
+#### 虚拟目录配置
 
 alias指定的目录是准确的，root是指定目录的上级目录，并且该上级目录要含有location指定名称的同名目录。
 
-```nginx
+```text
 location /img/ {
     alias /var/www/image/;
 }
@@ -1387,9 +1373,9 @@ location /img/ {
 # 访问/img/目录下的文件时，nginx会去/var/www/image/img/目录下找文件。]
 ```
 
-### 防盗图配置
+#### 防盗图配置
 
-```nginx
+```text
 location ~ \/public\/(css|js|img)\/.*\.(js|css|gif|jpg|jpeg|png|bmp|swf) {
     valid_referers none blocked *.jslite.io;
     if ($invalid_referer) {
@@ -1398,15 +1384,15 @@ location ~ \/public\/(css|js|img)\/.*\.(js|css|gif|jpg|jpeg|png|bmp|swf) {
 }
 ```
 
-### 屏蔽.git等文件
+#### 屏蔽.git等文件
 
-```nginx
+```text
 location ~ (.git|.gitattributes|.gitignore|.svn) {
     deny all;
 }
 ```
 
-### 域名路径加不加需要都能正常访问
+#### 域名路径加不加需要都能正常访问
 
 ```bash
 http://wangchujiang.com/api/index.php?a=1&name=wcj
@@ -1418,7 +1404,7 @@ http://wangchujiang.com/api/index?a=1&name=wcj
 
 nginx rewrite规则如下：
 
-```nginx
+```text
 rewrite ^/(.*)/$ /index.php?/$1 permanent;
 if (!-d $request_filename){
         set $rule_1 1$rule_1;
@@ -1431,7 +1417,7 @@ if ($rule_1 = "21"){
 }
 ```
 
-## 错误问题
+### 错误问题
 
 ```bash
 The plain HTTP request was sent to HTTPS port
@@ -1439,11 +1425,11 @@ The plain HTTP request was sent to HTTPS port
 
 解决办法，`fastcgi_param HTTPS $https if_not_empty` 添加这条规则，
 
-```nginx
+```text
 server {
     listen 443 ssl; # 注意这条规则
     server_name  my.domain.com;
-    
+
     fastcgi_param HTTPS $https if_not_empty;
     fastcgi_param HTTPS on;
 
@@ -1456,19 +1442,20 @@ server {
 }
 ```
 
-## Nginx 模块
+### Nginx 模块
 
-- [Nginx Office Hours](https://gitlab.com/rbdr/ngx_http_office_hours_filter_module) 一个 nginx 模块，允许您仅在办公时间内提供访问访问网站。
+* [Nginx Office Hours](https://gitlab.com/rbdr/ngx_http_office_hours_filter_module) 一个 nginx 模块，允许您仅在办公时间内提供访问访问网站。
 
-## 精品文章参考
+### 精品文章参考
 
-- [负载均衡原理的解析](https://my.oschina.net/u/3341316/blog/877206)
-- [Nginx泛域名解析，实现多个二级域名 ](http://blog.githuber.cn/posts/73)
-- [深入 NGINX: 我们如何设计性能和扩展](https://www.nginx.com/blog/inside-nginx-how-we-designed-for-performance-scale/)
-- [Inside NGINX: How We Designed for Performance & Scale](https://www.nginx.com/blog/inside-nginx-how-we-designed-for-performance-scale/)
-- [Nginx开发从入门到精通](http://tengine.taobao.org/book/index.html)
-- [Nginx的优化与防盗链](http://os.51cto.com/art/201703/535326.htm#topx)
-- [实战开发一个Nginx扩展 (Nginx Module)](https://segmentfault.com/a/1190000009769143)
-- [Nginx+Keepalived(双机热备)搭建高可用负载均衡环境(HA)](https://my.oschina.net/xshuai/blog/917097)
-- [Nginx 平滑升级](http://www.huxd.org/articles/2017/07/24/1500890692329.html)
-- [Nginx最新模块—ngx_http_mirror_module分析可以做版本发布前的预先验证，进行流量放大后的压测等等](https://mp.weixin.qq.com/s?__biz=MzIxNzg5ODE0OA==&mid=2247483708&idx=1&sn=90b0b1dccd9c337922a0588245277666&chksm=97f38cf7a08405e1928e0b46d923d630e529e7db8ac7ca2a91310a075986f8bcb2cee5b4953d#rd)
+* [负载均衡原理的解析](https://my.oschina.net/u/3341316/blog/877206)
+* [Nginx泛域名解析，实现多个二级域名 ](http://blog.githuber.cn/posts/73)
+* [深入 NGINX: 我们如何设计性能和扩展](https://www.nginx.com/blog/inside-nginx-how-we-designed-for-performance-scale/)
+* [Inside NGINX: How We Designed for Performance & Scale](https://www.nginx.com/blog/inside-nginx-how-we-designed-for-performance-scale/)
+* [Nginx开发从入门到精通](http://tengine.taobao.org/book/index.html)
+* [Nginx的优化与防盗链](http://os.51cto.com/art/201703/535326.htm#topx)
+* [实战开发一个Nginx扩展 \(Nginx Module\)](https://segmentfault.com/a/1190000009769143)
+* [Nginx+Keepalived\(双机热备\)搭建高可用负载均衡环境\(HA\)](https://my.oschina.net/xshuai/blog/917097)
+* [Nginx 平滑升级](http://www.huxd.org/articles/2017/07/24/1500890692329.html)
+* [Nginx最新模块—ngx\_http\_mirror\_module分析可以做版本发布前的预先验证，进行流量放大后的压测等等](https://mp.weixin.qq.com/s?__biz=MzIxNzg5ODE0OA==&mid=2247483708&idx=1&sn=90b0b1dccd9c337922a0588245277666&chksm=97f38cf7a08405e1928e0b46d923d630e529e7db8ac7ca2a91310a075986f8bcb2cee5b4953d#rd)
+
